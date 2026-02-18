@@ -1,0 +1,18 @@
+syntax = "proto3";
+
+package contracts.v1;
+
+option go_package = "github.com/legendaryneobatman/shop/gen/contracts/v1";
+
+service Auth {
+  rpc SignIn(SignInRequest) returns (SignInResponse) {}
+}
+
+message SignInRequest {
+  string username = 1;
+  string password = 2;
+}
+message SignInResponse {
+  string accessToken = 1;
+  string refreshToken = 2;
+}
