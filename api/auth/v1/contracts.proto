@@ -4,8 +4,14 @@ package contracts.v1;
 
 option go_package = "github.com/legendaryneobatman/shop/gen/contracts/v1";
 
+import "google/protobuf/empty.proto";
+
 service AuthService {
   rpc SignIn(SignInRequest) returns (SignInResponse) {}
+  rpc SignUp(SignUpRequest) returns (SignUpResponse) {}
+  rpc Refresh(RefreshRequest) returns (RefreshResponse) {}
+  rpc Logout(LogoutRequest) returns (LogoutResponse) {}
+  rpc LogoutAll(google.protobuf.Empty) returns (google.protobuf.Empty) {}
 }
 
 message SignInRequest {
@@ -16,6 +22,27 @@ message SignInResponse {
   string access_token = 1;
   string refresh_token = 2;
 }
+
+message SignUpRequest {
+  string name = 1;
+  string username = 2;
+  string password = 3;
+}
+message SignUpResponse {
+  int32 id = 1;
+}
+
+message RefreshRequest {
+  string refresh_token = 1;
+}
+message RefreshResponse {
+  string access_token = 1;
+  string refresh_token = 2;
+}
+message LogoutRequest {
+  string access_token = 1;
+}
+message LogoutResponse {}
 
 service UserService {
   rpc GetUser(GetUserRequest) returns (GetUserResponse) {}
