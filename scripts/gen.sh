@@ -27,6 +27,7 @@ for proto_file in $PROTO_FILES; do
         --go_opt=paths=source_relative \
         --go-grpc_out=gen/go \
         --go-grpc_opt=paths=source_relative \
+        --experimental_allow_proto3_optional \
         "$proto_file"
 done
 

@@ -5,6 +5,7 @@ package contracts.v1;
 option go_package = "github.com/legendaryneobatman/shop/gen/contracts/v1";
 
 import "google/protobuf/empty.proto";
+import "google/protobuf/timestamp.proto";
 
 service AuthService {
   rpc SignIn(SignInRequest) returns (SignInResponse) {}
@@ -29,7 +30,7 @@ message SignUpRequest {
   string password = 3;
 }
 message SignUpResponse {
-  int32 id = 1;
+  string id = 1;
 }
 
 message RefreshRequest {
@@ -45,7 +46,9 @@ message LogoutRequest {
 message LogoutResponse {}
 
 service UserService {
-  rpc GetUser(GetUserRequest) returns (GetUserResponse) {}
+  rpc GetCurrentUser(GetUserRequest) returns (GetUserResponse) {}
+  rpc GetUserById(GetUserRequest) returns (GetUserResponse) {}
+  rpc GetUserList(google.protobuf.Empty) returns (GetUserListResponse) {}
   rpc CreateUser(CreateUserRequest) returns (CreateUserResponse) {}
   rpc UpdateUser(UpdateUserRequest) returns (UpdateUserResponse) {}
   rpc DeleteUser(DeleteUserRequest) returns (DeleteUserResponse) {}
@@ -58,7 +61,9 @@ enum UserRole {
   MODERATOR = 2;
 }
 
-message GetUserRequest {}
+message GetUserRequest {
+  optional string id = 1;
+}
 message GetUserResponse {
   string id = 1;
   string name = 2;
@@ -68,8 +73,11 @@ message GetUserResponse {
   string phone = 6;
   UserRole role = 7;
   bool is_active = 8;
-  string created_at = 9;
-  string updated_at = 10;
+  google.protobuf.Timestamp created_at = 9;
+  google.protobuf.Timestamp updated_at = 10;
+}
+message GetUserListResponse {
+  repeated GetUserResponse data = 1;
 }
 message CreateUserRequest {
   string name = 1;
@@ -81,15 +89,13 @@ message CreateUserResponse {
 }
 message UpdateUserRequest {
   string id = 1;
-  string name = 2;
-  string username = 3;
-  string email = 4;
-  string avatar_url = 5;
-  string phone = 6;
-  UserRole role = 7;
-  bool is_active = 8;
-  string created_at = 9;
-  string updated_at = 10;
+  optional string name = 2;
+  optional string username = 3;
+  optional string email = 4;
+  optional string avatar_url = 5;
+  optional string phone = 6;
+  optional UserRole role = 7;
+  optional bool is_active = 8;
 }
 message UpdateUserResponse {
   string id = 1;
@@ -100,8 +106,8 @@ message UpdateUserResponse {
   string phone = 6;
   UserRole role = 7;
   bool is_active = 8;
-  string created_at = 9;
-  string updated_at = 10;
+  google.protobuf.Timestamp created_at = 9;
+  google.protobuf.Timestamp updated_at = 10;
 }
 message DeleteUserRequest {
   string id = 1;

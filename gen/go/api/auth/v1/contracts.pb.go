@@ -8,6 +8,7 @@ package v1
 
 import (
 	empty "github.com/golang/protobuf/ptypes/empty"
+	timestamp "github.com/golang/protobuf/ptypes/timestamp"
 	protoreflect "google.golang.org/protobuf/reflect/protoreflect"
 	protoimpl "google.golang.org/protobuf/runtime/protoimpl"
 	reflect "reflect"
@@ -240,7 +241,7 @@ func (x *SignUpRequest) GetPassword() string {
 
 type SignUpResponse struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
-	Id            int32                  `protobuf:"varint,1,opt,name=id,proto3" json:"id,omitempty"`
+	Id            string                 `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -275,11 +276,11 @@ func (*SignUpResponse) Descriptor() ([]byte, []int) {
 	return file_api_auth_v1_contracts_proto_rawDescGZIP(), []int{3}
 }
 
-func (x *SignUpResponse) GetId() int32 {
+func (x *SignUpResponse) GetId() string {
 	if x != nil {
 		return x.Id
 	}
-	return 0
+	return ""
 }
 
 type RefreshRequest struct {
@@ -460,6 +461,7 @@ func (*LogoutResponse) Descriptor() ([]byte, []int) {
 
 type GetUserRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
+	Id            *string                `protobuf:"bytes,1,opt,name=id,proto3,oneof" json:"id,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -494,6 +496,13 @@ func (*GetUserRequest) Descriptor() ([]byte, []int) {
 	return file_api_auth_v1_contracts_proto_rawDescGZIP(), []int{8}
 }
 
+func (x *GetUserRequest) GetId() string {
+	if x != nil && x.Id != nil {
+		return *x.Id
+	}
+	return ""
+}
+
 type GetUserResponse struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	Id            string                 `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty"`
@@ -504,8 +513,8 @@ type GetUserResponse struct {
 	Phone         string                 `protobuf:"bytes,6,opt,name=phone,proto3" json:"phone,omitempty"`
 	Role          UserRole               `protobuf:"varint,7,opt,name=role,proto3,enum=contracts.v1.UserRole" json:"role,omitempty"`
 	IsActive      bool                   `protobuf:"varint,8,opt,name=is_active,json=isActive,proto3" json:"is_active,omitempty"`
-	CreatedAt     string                 `protobuf:"bytes,9,opt,name=created_at,json=createdAt,proto3" json:"created_at,omitempty"`
-	UpdatedAt     string                 `protobuf:"bytes,10,opt,name=updated_at,json=updatedAt,proto3" json:"updated_at,omitempty"`
+	CreatedAt     *timestamp.Timestamp   `protobuf:"bytes,9,opt,name=created_at,json=createdAt,proto3" json:"created_at,omitempty"`
+	UpdatedAt     *timestamp.Timestamp   `protobuf:"bytes,10,opt,name=updated_at,json=updatedAt,proto3" json:"updated_at,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -596,18 +605,62 @@ func (x *GetUserResponse) GetIsActive() bool {
 	return false
 }
 
-func (x *GetUserResponse) GetCreatedAt() string {
+func (x *GetUserResponse) GetCreatedAt() *timestamp.Timestamp {
 	if x != nil {
 		return x.CreatedAt
 	}
-	return ""
+	return nil
 }
 
-func (x *GetUserResponse) GetUpdatedAt() string {
+func (x *GetUserResponse) GetUpdatedAt() *timestamp.Timestamp {
 	if x != nil {
 		return x.UpdatedAt
 	}
-	return ""
+	return nil
+}
+
+type GetUserListResponse struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Data          []*GetUserResponse     `protobuf:"bytes,1,rep,name=data,proto3" json:"data,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *GetUserListResponse) Reset() {
+	*x = GetUserListResponse{}
+	mi := &file_api_auth_v1_contracts_proto_msgTypes[10]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *GetUserListResponse) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*GetUserListResponse) ProtoMessage() {}
+
+func (x *GetUserListResponse) ProtoReflect() protoreflect.Message {
+	mi := &file_api_auth_v1_contracts_proto_msgTypes[10]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use GetUserListResponse.ProtoReflect.Descriptor instead.
+func (*GetUserListResponse) Descriptor() ([]byte, []int) {
+	return file_api_auth_v1_contracts_proto_rawDescGZIP(), []int{10}
+}
+
+func (x *GetUserListResponse) GetData() []*GetUserResponse {
+	if x != nil {
+		return x.Data
+	}
+	return nil
 }
 
 type CreateUserRequest struct {
@@ -621,7 +674,7 @@ type CreateUserRequest struct {
 
 func (x *CreateUserRequest) Reset() {
 	*x = CreateUserRequest{}
-	mi := &file_api_auth_v1_contracts_proto_msgTypes[10]
+	mi := &file_api_auth_v1_contracts_proto_msgTypes[11]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -633,7 +686,7 @@ func (x *CreateUserRequest) String() string {
 func (*CreateUserRequest) ProtoMessage() {}
 
 func (x *CreateUserRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_api_auth_v1_contracts_proto_msgTypes[10]
+	mi := &file_api_auth_v1_contracts_proto_msgTypes[11]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -646,7 +699,7 @@ func (x *CreateUserRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use CreateUserRequest.ProtoReflect.Descriptor instead.
 func (*CreateUserRequest) Descriptor() ([]byte, []int) {
-	return file_api_auth_v1_contracts_proto_rawDescGZIP(), []int{10}
+	return file_api_auth_v1_contracts_proto_rawDescGZIP(), []int{11}
 }
 
 func (x *CreateUserRequest) GetName() string {
@@ -679,7 +732,7 @@ type CreateUserResponse struct {
 
 func (x *CreateUserResponse) Reset() {
 	*x = CreateUserResponse{}
-	mi := &file_api_auth_v1_contracts_proto_msgTypes[11]
+	mi := &file_api_auth_v1_contracts_proto_msgTypes[12]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -691,7 +744,7 @@ func (x *CreateUserResponse) String() string {
 func (*CreateUserResponse) ProtoMessage() {}
 
 func (x *CreateUserResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_api_auth_v1_contracts_proto_msgTypes[11]
+	mi := &file_api_auth_v1_contracts_proto_msgTypes[12]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -704,7 +757,7 @@ func (x *CreateUserResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use CreateUserResponse.ProtoReflect.Descriptor instead.
 func (*CreateUserResponse) Descriptor() ([]byte, []int) {
-	return file_api_auth_v1_contracts_proto_rawDescGZIP(), []int{11}
+	return file_api_auth_v1_contracts_proto_rawDescGZIP(), []int{12}
 }
 
 func (x *CreateUserResponse) GetId() string {
@@ -717,22 +770,20 @@ func (x *CreateUserResponse) GetId() string {
 type UpdateUserRequest struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	Id            string                 `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty"`
-	Name          string                 `protobuf:"bytes,2,opt,name=name,proto3" json:"name,omitempty"`
-	Username      string                 `protobuf:"bytes,3,opt,name=username,proto3" json:"username,omitempty"`
-	Email         string                 `protobuf:"bytes,4,opt,name=email,proto3" json:"email,omitempty"`
-	AvatarUrl     string                 `protobuf:"bytes,5,opt,name=avatar_url,json=avatarUrl,proto3" json:"avatar_url,omitempty"`
-	Phone         string                 `protobuf:"bytes,6,opt,name=phone,proto3" json:"phone,omitempty"`
-	Role          UserRole               `protobuf:"varint,7,opt,name=role,proto3,enum=contracts.v1.UserRole" json:"role,omitempty"`
-	IsActive      bool                   `protobuf:"varint,8,opt,name=is_active,json=isActive,proto3" json:"is_active,omitempty"`
-	CreatedAt     string                 `protobuf:"bytes,9,opt,name=created_at,json=createdAt,proto3" json:"created_at,omitempty"`
-	UpdatedAt     string                 `protobuf:"bytes,10,opt,name=updated_at,json=updatedAt,proto3" json:"updated_at,omitempty"`
+	Name          *string                `protobuf:"bytes,2,opt,name=name,proto3,oneof" json:"name,omitempty"`
+	Username      *string                `protobuf:"bytes,3,opt,name=username,proto3,oneof" json:"username,omitempty"`
+	Email         *string                `protobuf:"bytes,4,opt,name=email,proto3,oneof" json:"email,omitempty"`
+	AvatarUrl     *string                `protobuf:"bytes,5,opt,name=avatar_url,json=avatarUrl,proto3,oneof" json:"avatar_url,omitempty"`
+	Phone         *string                `protobuf:"bytes,6,opt,name=phone,proto3,oneof" json:"phone,omitempty"`
+	Role          *UserRole              `protobuf:"varint,7,opt,name=role,proto3,enum=contracts.v1.UserRole,oneof" json:"role,omitempty"`
+	IsActive      *bool                  `protobuf:"varint,8,opt,name=is_active,json=isActive,proto3,oneof" json:"is_active,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
 
 func (x *UpdateUserRequest) Reset() {
 	*x = UpdateUserRequest{}
-	mi := &file_api_auth_v1_contracts_proto_msgTypes[12]
+	mi := &file_api_auth_v1_contracts_proto_msgTypes[13]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -744,7 +795,7 @@ func (x *UpdateUserRequest) String() string {
 func (*UpdateUserRequest) ProtoMessage() {}
 
 func (x *UpdateUserRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_api_auth_v1_contracts_proto_msgTypes[12]
+	mi := &file_api_auth_v1_contracts_proto_msgTypes[13]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -757,7 +808,7 @@ func (x *UpdateUserRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use UpdateUserRequest.ProtoReflect.Descriptor instead.
 func (*UpdateUserRequest) Descriptor() ([]byte, []int) {
-	return file_api_auth_v1_contracts_proto_rawDescGZIP(), []int{12}
+	return file_api_auth_v1_contracts_proto_rawDescGZIP(), []int{13}
 }
 
 func (x *UpdateUserRequest) GetId() string {
@@ -768,66 +819,52 @@ func (x *UpdateUserRequest) GetId() string {
 }
 
 func (x *UpdateUserRequest) GetName() string {
-	if x != nil {
-		return x.Name
+	if x != nil && x.Name != nil {
+		return *x.Name
 	}
 	return ""
 }
 
 func (x *UpdateUserRequest) GetUsername() string {
-	if x != nil {
-		return x.Username
+	if x != nil && x.Username != nil {
+		return *x.Username
 	}
 	return ""
 }
 
 func (x *UpdateUserRequest) GetEmail() string {
-	if x != nil {
-		return x.Email
+	if x != nil && x.Email != nil {
+		return *x.Email
 	}
 	return ""
 }
 
 func (x *UpdateUserRequest) GetAvatarUrl() string {
-	if x != nil {
-		return x.AvatarUrl
+	if x != nil && x.AvatarUrl != nil {
+		return *x.AvatarUrl
 	}
 	return ""
 }
 
 func (x *UpdateUserRequest) GetPhone() string {
-	if x != nil {
-		return x.Phone
+	if x != nil && x.Phone != nil {
+		return *x.Phone
 	}
 	return ""
 }
 
 func (x *UpdateUserRequest) GetRole() UserRole {
-	if x != nil {
-		return x.Role
+	if x != nil && x.Role != nil {
+		return *x.Role
 	}
 	return UserRole_ROLE_UNSPECIFIED
 }
 
 func (x *UpdateUserRequest) GetIsActive() bool {
-	if x != nil {
-		return x.IsActive
+	if x != nil && x.IsActive != nil {
+		return *x.IsActive
 	}
 	return false
-}
-
-func (x *UpdateUserRequest) GetCreatedAt() string {
-	if x != nil {
-		return x.CreatedAt
-	}
-	return ""
-}
-
-func (x *UpdateUserRequest) GetUpdatedAt() string {
-	if x != nil {
-		return x.UpdatedAt
-	}
-	return ""
 }
 
 type UpdateUserResponse struct {
@@ -840,15 +877,15 @@ type UpdateUserResponse struct {
 	Phone         string                 `protobuf:"bytes,6,opt,name=phone,proto3" json:"phone,omitempty"`
 	Role          UserRole               `protobuf:"varint,7,opt,name=role,proto3,enum=contracts.v1.UserRole" json:"role,omitempty"`
 	IsActive      bool                   `protobuf:"varint,8,opt,name=is_active,json=isActive,proto3" json:"is_active,omitempty"`
-	CreatedAt     string                 `protobuf:"bytes,9,opt,name=created_at,json=createdAt,proto3" json:"created_at,omitempty"`
-	UpdatedAt     string                 `protobuf:"bytes,10,opt,name=updated_at,json=updatedAt,proto3" json:"updated_at,omitempty"`
+	CreatedAt     *timestamp.Timestamp   `protobuf:"bytes,9,opt,name=created_at,json=createdAt,proto3" json:"created_at,omitempty"`
+	UpdatedAt     *timestamp.Timestamp   `protobuf:"bytes,10,opt,name=updated_at,json=updatedAt,proto3" json:"updated_at,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
 
 func (x *UpdateUserResponse) Reset() {
 	*x = UpdateUserResponse{}
-	mi := &file_api_auth_v1_contracts_proto_msgTypes[13]
+	mi := &file_api_auth_v1_contracts_proto_msgTypes[14]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -860,7 +897,7 @@ func (x *UpdateUserResponse) String() string {
 func (*UpdateUserResponse) ProtoMessage() {}
 
 func (x *UpdateUserResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_api_auth_v1_contracts_proto_msgTypes[13]
+	mi := &file_api_auth_v1_contracts_proto_msgTypes[14]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -873,7 +910,7 @@ func (x *UpdateUserResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use UpdateUserResponse.ProtoReflect.Descriptor instead.
 func (*UpdateUserResponse) Descriptor() ([]byte, []int) {
-	return file_api_auth_v1_contracts_proto_rawDescGZIP(), []int{13}
+	return file_api_auth_v1_contracts_proto_rawDescGZIP(), []int{14}
 }
 
 func (x *UpdateUserResponse) GetId() string {
@@ -932,18 +969,18 @@ func (x *UpdateUserResponse) GetIsActive() bool {
 	return false
 }
 
-func (x *UpdateUserResponse) GetCreatedAt() string {
+func (x *UpdateUserResponse) GetCreatedAt() *timestamp.Timestamp {
 	if x != nil {
 		return x.CreatedAt
 	}
-	return ""
+	return nil
 }
 
-func (x *UpdateUserResponse) GetUpdatedAt() string {
+func (x *UpdateUserResponse) GetUpdatedAt() *timestamp.Timestamp {
 	if x != nil {
 		return x.UpdatedAt
 	}
-	return ""
+	return nil
 }
 
 type DeleteUserRequest struct {
@@ -955,7 +992,7 @@ type DeleteUserRequest struct {
 
 func (x *DeleteUserRequest) Reset() {
 	*x = DeleteUserRequest{}
-	mi := &file_api_auth_v1_contracts_proto_msgTypes[14]
+	mi := &file_api_auth_v1_contracts_proto_msgTypes[15]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -967,7 +1004,7 @@ func (x *DeleteUserRequest) String() string {
 func (*DeleteUserRequest) ProtoMessage() {}
 
 func (x *DeleteUserRequest) ProtoReflect() protoreflect.Message {
-	mi := &file_api_auth_v1_contracts_proto_msgTypes[14]
+	mi := &file_api_auth_v1_contracts_proto_msgTypes[15]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -980,7 +1017,7 @@ func (x *DeleteUserRequest) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use DeleteUserRequest.ProtoReflect.Descriptor instead.
 func (*DeleteUserRequest) Descriptor() ([]byte, []int) {
-	return file_api_auth_v1_contracts_proto_rawDescGZIP(), []int{14}
+	return file_api_auth_v1_contracts_proto_rawDescGZIP(), []int{15}
 }
 
 func (x *DeleteUserRequest) GetId() string {
@@ -999,7 +1036,7 @@ type DeleteUserResponse struct {
 
 func (x *DeleteUserResponse) Reset() {
 	*x = DeleteUserResponse{}
-	mi := &file_api_auth_v1_contracts_proto_msgTypes[15]
+	mi := &file_api_auth_v1_contracts_proto_msgTypes[16]
 	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 	ms.StoreMessageInfo(mi)
 }
@@ -1011,7 +1048,7 @@ func (x *DeleteUserResponse) String() string {
 func (*DeleteUserResponse) ProtoMessage() {}
 
 func (x *DeleteUserResponse) ProtoReflect() protoreflect.Message {
-	mi := &file_api_auth_v1_contracts_proto_msgTypes[15]
+	mi := &file_api_auth_v1_contracts_proto_msgTypes[16]
 	if x != nil {
 		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
 		if ms.LoadMessageInfo() == nil {
@@ -1024,7 +1061,7 @@ func (x *DeleteUserResponse) ProtoReflect() protoreflect.Message {
 
 // Deprecated: Use DeleteUserResponse.ProtoReflect.Descriptor instead.
 func (*DeleteUserResponse) Descriptor() ([]byte, []int) {
-	return file_api_auth_v1_contracts_proto_rawDescGZIP(), []int{15}
+	return file_api_auth_v1_contracts_proto_rawDescGZIP(), []int{16}
 }
 
 func (x *DeleteUserResponse) GetId() string {
@@ -1038,7 +1075,7 @@ var File_api_auth_v1_contracts_proto protoreflect.FileDescriptor
 
 const file_api_auth_v1_contracts_proto_rawDesc = "" +
 	"\n" +
-	"\x1bapi/auth/v1/contracts.proto\x12\fcontracts.v1\x1a\x1bgoogle/protobuf/empty.proto\"G\n" +
+	"\x1bapi/auth/v1/contracts.proto\x12\fcontracts.v1\x1a\x1bgoogle/protobuf/empty.proto\x1a\x1fgoogle/protobuf/timestamp.proto\"G\n" +
 	"\rSignInRequest\x12\x1a\n" +
 	"\busername\x18\x01 \x01(\tR\busername\x12\x1a\n" +
 	"\bpassword\x18\x02 \x01(\tR\bpassword\"X\n" +
@@ -1050,7 +1087,7 @@ const file_api_auth_v1_contracts_proto_rawDesc = "" +
 	"\busername\x18\x02 \x01(\tR\busername\x12\x1a\n" +
 	"\bpassword\x18\x03 \x01(\tR\bpassword\" \n" +
 	"\x0eSignUpResponse\x12\x0e\n" +
-	"\x02id\x18\x01 \x01(\x05R\x02id\"5\n" +
+	"\x02id\x18\x01 \x01(\tR\x02id\"5\n" +
 	"\x0eRefreshRequest\x12#\n" +
 	"\rrefresh_token\x18\x01 \x01(\tR\frefreshToken\"Y\n" +
 	"\x0fRefreshResponse\x12!\n" +
@@ -1058,8 +1095,10 @@ const file_api_auth_v1_contracts_proto_rawDesc = "" +
 	"\rrefresh_token\x18\x02 \x01(\tR\frefreshToken\"2\n" +
 	"\rLogoutRequest\x12!\n" +
 	"\faccess_token\x18\x01 \x01(\tR\vaccessToken\"\x10\n" +
-	"\x0eLogoutResponse\"\x10\n" +
-	"\x0eGetUserRequest\"\xa3\x02\n" +
+	"\x0eLogoutResponse\",\n" +
+	"\x0eGetUserRequest\x12\x13\n" +
+	"\x02id\x18\x01 \x01(\tH\x00R\x02id\x88\x01\x01B\x05\n" +
+	"\x03_id\"\xdb\x02\n" +
 	"\x0fGetUserResponse\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\tR\x02id\x12\x12\n" +
 	"\x04name\x18\x02 \x01(\tR\x04name\x12\x1a\n" +
@@ -1069,33 +1108,38 @@ const file_api_auth_v1_contracts_proto_rawDesc = "" +
 	"avatar_url\x18\x05 \x01(\tR\tavatarUrl\x12\x14\n" +
 	"\x05phone\x18\x06 \x01(\tR\x05phone\x12*\n" +
 	"\x04role\x18\a \x01(\x0e2\x16.contracts.v1.UserRoleR\x04role\x12\x1b\n" +
-	"\tis_active\x18\b \x01(\bR\bisActive\x12\x1d\n" +
+	"\tis_active\x18\b \x01(\bR\bisActive\x129\n" +
 	"\n" +
-	"created_at\x18\t \x01(\tR\tcreatedAt\x12\x1d\n" +
+	"created_at\x18\t \x01(\v2\x1a.google.protobuf.TimestampR\tcreatedAt\x129\n" +
 	"\n" +
 	"updated_at\x18\n" +
-	" \x01(\tR\tupdatedAt\"h\n" +
+	" \x01(\v2\x1a.google.protobuf.TimestampR\tupdatedAt\"H\n" +
+	"\x13GetUserListResponse\x121\n" +
+	"\x04data\x18\x01 \x03(\v2\x1d.contracts.v1.GetUserResponseR\x04data\"h\n" +
 	"\x11CreateUserRequest\x12\x12\n" +
 	"\x04name\x18\x01 \x01(\tR\x04name\x12\x1a\n" +
 	"\busername\x18\x02 \x01(\tR\busername\x12#\n" +
 	"\rpassword_hash\x18\x03 \x01(\tR\fpasswordHash\"$\n" +
 	"\x12CreateUserResponse\x12\x0e\n" +
-	"\x02id\x18\x01 \x01(\tR\x02id\"\xa5\x02\n" +
+	"\x02id\x18\x01 \x01(\tR\x02id\"\xda\x02\n" +
 	"\x11UpdateUserRequest\x12\x0e\n" +
-	"\x02id\x18\x01 \x01(\tR\x02id\x12\x12\n" +
-	"\x04name\x18\x02 \x01(\tR\x04name\x12\x1a\n" +
-	"\busername\x18\x03 \x01(\tR\busername\x12\x14\n" +
-	"\x05email\x18\x04 \x01(\tR\x05email\x12\x1d\n" +
+	"\x02id\x18\x01 \x01(\tR\x02id\x12\x17\n" +
+	"\x04name\x18\x02 \x01(\tH\x00R\x04name\x88\x01\x01\x12\x1f\n" +
+	"\busername\x18\x03 \x01(\tH\x01R\busername\x88\x01\x01\x12\x19\n" +
+	"\x05email\x18\x04 \x01(\tH\x02R\x05email\x88\x01\x01\x12\"\n" +
 	"\n" +
-	"avatar_url\x18\x05 \x01(\tR\tavatarUrl\x12\x14\n" +
-	"\x05phone\x18\x06 \x01(\tR\x05phone\x12*\n" +
-	"\x04role\x18\a \x01(\x0e2\x16.contracts.v1.UserRoleR\x04role\x12\x1b\n" +
-	"\tis_active\x18\b \x01(\bR\bisActive\x12\x1d\n" +
+	"avatar_url\x18\x05 \x01(\tH\x03R\tavatarUrl\x88\x01\x01\x12\x19\n" +
+	"\x05phone\x18\x06 \x01(\tH\x04R\x05phone\x88\x01\x01\x12/\n" +
+	"\x04role\x18\a \x01(\x0e2\x16.contracts.v1.UserRoleH\x05R\x04role\x88\x01\x01\x12 \n" +
+	"\tis_active\x18\b \x01(\bH\x06R\bisActive\x88\x01\x01B\a\n" +
+	"\x05_nameB\v\n" +
+	"\t_usernameB\b\n" +
+	"\x06_emailB\r\n" +
+	"\v_avatar_urlB\b\n" +
+	"\x06_phoneB\a\n" +
+	"\x05_roleB\f\n" +
 	"\n" +
-	"created_at\x18\t \x01(\tR\tcreatedAt\x12\x1d\n" +
-	"\n" +
-	"updated_at\x18\n" +
-	" \x01(\tR\tupdatedAt\"\xa6\x02\n" +
+	"_is_active\"\xde\x02\n" +
 	"\x12UpdateUserResponse\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\tR\x02id\x12\x12\n" +
 	"\x04name\x18\x02 \x01(\tR\x04name\x12\x1a\n" +
@@ -1105,12 +1149,12 @@ const file_api_auth_v1_contracts_proto_rawDesc = "" +
 	"avatar_url\x18\x05 \x01(\tR\tavatarUrl\x12\x14\n" +
 	"\x05phone\x18\x06 \x01(\tR\x05phone\x12*\n" +
 	"\x04role\x18\a \x01(\x0e2\x16.contracts.v1.UserRoleR\x04role\x12\x1b\n" +
-	"\tis_active\x18\b \x01(\bR\bisActive\x12\x1d\n" +
+	"\tis_active\x18\b \x01(\bR\bisActive\x129\n" +
 	"\n" +
-	"created_at\x18\t \x01(\tR\tcreatedAt\x12\x1d\n" +
+	"created_at\x18\t \x01(\v2\x1a.google.protobuf.TimestampR\tcreatedAt\x129\n" +
 	"\n" +
 	"updated_at\x18\n" +
-	" \x01(\tR\tupdatedAt\"#\n" +
+	" \x01(\v2\x1a.google.protobuf.TimestampR\tupdatedAt\"#\n" +
 	"\x11DeleteUserRequest\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\tR\x02id\"$\n" +
 	"\x12DeleteUserResponse\x12\x0e\n" +
@@ -1125,9 +1169,11 @@ const file_api_auth_v1_contracts_proto_rawDesc = "" +
 	"\x06SignUp\x12\x1b.contracts.v1.SignUpRequest\x1a\x1c.contracts.v1.SignUpResponse\"\x00\x12H\n" +
 	"\aRefresh\x12\x1c.contracts.v1.RefreshRequest\x1a\x1d.contracts.v1.RefreshResponse\"\x00\x12E\n" +
 	"\x06Logout\x12\x1b.contracts.v1.LogoutRequest\x1a\x1c.contracts.v1.LogoutResponse\"\x00\x12=\n" +
-	"\tLogoutAll\x12\x16.google.protobuf.Empty\x1a\x16.google.protobuf.Empty\"\x002\xd0\x02\n" +
-	"\vUserService\x12H\n" +
-	"\aGetUser\x12\x1c.contracts.v1.GetUserRequest\x1a\x1d.contracts.v1.GetUserResponse\"\x00\x12Q\n" +
+	"\tLogoutAll\x12\x16.google.protobuf.Empty\x1a\x16.google.protobuf.Empty\"\x002\xf1\x03\n" +
+	"\vUserService\x12O\n" +
+	"\x0eGetCurrentUser\x12\x1c.contracts.v1.GetUserRequest\x1a\x1d.contracts.v1.GetUserResponse\"\x00\x12L\n" +
+	"\vGetUserById\x12\x1c.contracts.v1.GetUserRequest\x1a\x1d.contracts.v1.GetUserResponse\"\x00\x12J\n" +
+	"\vGetUserList\x12\x16.google.protobuf.Empty\x1a!.contracts.v1.GetUserListResponse\"\x00\x12Q\n" +
 	"\n" +
 	"CreateUser\x12\x1f.contracts.v1.CreateUserRequest\x1a .contracts.v1.CreateUserResponse\"\x00\x12Q\n" +
 	"\n" +
@@ -1148,54 +1194,65 @@ func file_api_auth_v1_contracts_proto_rawDescGZIP() []byte {
 }
 
 var file_api_auth_v1_contracts_proto_enumTypes = make([]protoimpl.EnumInfo, 1)
-var file_api_auth_v1_contracts_proto_msgTypes = make([]protoimpl.MessageInfo, 16)
+var file_api_auth_v1_contracts_proto_msgTypes = make([]protoimpl.MessageInfo, 17)
 var file_api_auth_v1_contracts_proto_goTypes = []any{
-	(UserRole)(0),              // 0: contracts.v1.UserRole
-	(*SignInRequest)(nil),      // 1: contracts.v1.SignInRequest
-	(*SignInResponse)(nil),     // 2: contracts.v1.SignInResponse
-	(*SignUpRequest)(nil),      // 3: contracts.v1.SignUpRequest
-	(*SignUpResponse)(nil),     // 4: contracts.v1.SignUpResponse
-	(*RefreshRequest)(nil),     // 5: contracts.v1.RefreshRequest
-	(*RefreshResponse)(nil),    // 6: contracts.v1.RefreshResponse
-	(*LogoutRequest)(nil),      // 7: contracts.v1.LogoutRequest
-	(*LogoutResponse)(nil),     // 8: contracts.v1.LogoutResponse
-	(*GetUserRequest)(nil),     // 9: contracts.v1.GetUserRequest
-	(*GetUserResponse)(nil),    // 10: contracts.v1.GetUserResponse
-	(*CreateUserRequest)(nil),  // 11: contracts.v1.CreateUserRequest
-	(*CreateUserResponse)(nil), // 12: contracts.v1.CreateUserResponse
-	(*UpdateUserRequest)(nil),  // 13: contracts.v1.UpdateUserRequest
-	(*UpdateUserResponse)(nil), // 14: contracts.v1.UpdateUserResponse
-	(*DeleteUserRequest)(nil),  // 15: contracts.v1.DeleteUserRequest
-	(*DeleteUserResponse)(nil), // 16: contracts.v1.DeleteUserResponse
-	(*empty.Empty)(nil),        // 17: google.protobuf.Empty
+	(UserRole)(0),               // 0: contracts.v1.UserRole
+	(*SignInRequest)(nil),       // 1: contracts.v1.SignInRequest
+	(*SignInResponse)(nil),      // 2: contracts.v1.SignInResponse
+	(*SignUpRequest)(nil),       // 3: contracts.v1.SignUpRequest
+	(*SignUpResponse)(nil),      // 4: contracts.v1.SignUpResponse
+	(*RefreshRequest)(nil),      // 5: contracts.v1.RefreshRequest
+	(*RefreshResponse)(nil),     // 6: contracts.v1.RefreshResponse
+	(*LogoutRequest)(nil),       // 7: contracts.v1.LogoutRequest
+	(*LogoutResponse)(nil),      // 8: contracts.v1.LogoutResponse
+	(*GetUserRequest)(nil),      // 9: contracts.v1.GetUserRequest
+	(*GetUserResponse)(nil),     // 10: contracts.v1.GetUserResponse
+	(*GetUserListResponse)(nil), // 11: contracts.v1.GetUserListResponse
+	(*CreateUserRequest)(nil),   // 12: contracts.v1.CreateUserRequest
+	(*CreateUserResponse)(nil),  // 13: contracts.v1.CreateUserResponse
+	(*UpdateUserRequest)(nil),   // 14: contracts.v1.UpdateUserRequest
+	(*UpdateUserResponse)(nil),  // 15: contracts.v1.UpdateUserResponse
+	(*DeleteUserRequest)(nil),   // 16: contracts.v1.DeleteUserRequest
+	(*DeleteUserResponse)(nil),  // 17: contracts.v1.DeleteUserResponse
+	(*timestamp.Timestamp)(nil), // 18: google.protobuf.Timestamp
+	(*empty.Empty)(nil),         // 19: google.protobuf.Empty
 }
 var file_api_auth_v1_contracts_proto_depIdxs = []int32{
 	0,  // 0: contracts.v1.GetUserResponse.role:type_name -> contracts.v1.UserRole
-	0,  // 1: contracts.v1.UpdateUserRequest.role:type_name -> contracts.v1.UserRole
-	0,  // 2: contracts.v1.UpdateUserResponse.role:type_name -> contracts.v1.UserRole
-	1,  // 3: contracts.v1.AuthService.SignIn:input_type -> contracts.v1.SignInRequest
-	3,  // 4: contracts.v1.AuthService.SignUp:input_type -> contracts.v1.SignUpRequest
-	5,  // 5: contracts.v1.AuthService.Refresh:input_type -> contracts.v1.RefreshRequest
-	7,  // 6: contracts.v1.AuthService.Logout:input_type -> contracts.v1.LogoutRequest
-	17, // 7: contracts.v1.AuthService.LogoutAll:input_type -> google.protobuf.Empty
-	9,  // 8: contracts.v1.UserService.GetUser:input_type -> contracts.v1.GetUserRequest
-	11, // 9: contracts.v1.UserService.CreateUser:input_type -> contracts.v1.CreateUserRequest
-	13, // 10: contracts.v1.UserService.UpdateUser:input_type -> contracts.v1.UpdateUserRequest
-	15, // 11: contracts.v1.UserService.DeleteUser:input_type -> contracts.v1.DeleteUserRequest
-	2,  // 12: contracts.v1.AuthService.SignIn:output_type -> contracts.v1.SignInResponse
-	4,  // 13: contracts.v1.AuthService.SignUp:output_type -> contracts.v1.SignUpResponse
-	6,  // 14: contracts.v1.AuthService.Refresh:output_type -> contracts.v1.RefreshResponse
-	8,  // 15: contracts.v1.AuthService.Logout:output_type -> contracts.v1.LogoutResponse
-	17, // 16: contracts.v1.AuthService.LogoutAll:output_type -> google.protobuf.Empty
-	10, // 17: contracts.v1.UserService.GetUser:output_type -> contracts.v1.GetUserResponse
-	12, // 18: contracts.v1.UserService.CreateUser:output_type -> contracts.v1.CreateUserResponse
-	14, // 19: contracts.v1.UserService.UpdateUser:output_type -> contracts.v1.UpdateUserResponse
-	16, // 20: contracts.v1.UserService.DeleteUser:output_type -> contracts.v1.DeleteUserResponse
-	12, // [12:21] is the sub-list for method output_type
-	3,  // [3:12] is the sub-list for method input_type
-	3,  // [3:3] is the sub-list for extension type_name
-	3,  // [3:3] is the sub-list for extension extendee
-	0,  // [0:3] is the sub-list for field type_name
+	18, // 1: contracts.v1.GetUserResponse.created_at:type_name -> google.protobuf.Timestamp
+	18, // 2: contracts.v1.GetUserResponse.updated_at:type_name -> google.protobuf.Timestamp
+	10, // 3: contracts.v1.GetUserListResponse.data:type_name -> contracts.v1.GetUserResponse
+	0,  // 4: contracts.v1.UpdateUserRequest.role:type_name -> contracts.v1.UserRole
+	0,  // 5: contracts.v1.UpdateUserResponse.role:type_name -> contracts.v1.UserRole
+	18, // 6: contracts.v1.UpdateUserResponse.created_at:type_name -> google.protobuf.Timestamp
+	18, // 7: contracts.v1.UpdateUserResponse.updated_at:type_name -> google.protobuf.Timestamp
+	1,  // 8: contracts.v1.AuthService.SignIn:input_type -> contracts.v1.SignInRequest
+	3,  // 9: contracts.v1.AuthService.SignUp:input_type -> contracts.v1.SignUpRequest
+	5,  // 10: contracts.v1.AuthService.Refresh:input_type -> contracts.v1.RefreshRequest
+	7,  // 11: contracts.v1.AuthService.Logout:input_type -> contracts.v1.LogoutRequest
+	19, // 12: contracts.v1.AuthService.LogoutAll:input_type -> google.protobuf.Empty
+	9,  // 13: contracts.v1.UserService.GetCurrentUser:input_type -> contracts.v1.GetUserRequest
+	9,  // 14: contracts.v1.UserService.GetUserById:input_type -> contracts.v1.GetUserRequest
+	19, // 15: contracts.v1.UserService.GetUserList:input_type -> google.protobuf.Empty
+	12, // 16: contracts.v1.UserService.CreateUser:input_type -> contracts.v1.CreateUserRequest
+	14, // 17: contracts.v1.UserService.UpdateUser:input_type -> contracts.v1.UpdateUserRequest
+	16, // 18: contracts.v1.UserService.DeleteUser:input_type -> contracts.v1.DeleteUserRequest
+	2,  // 19: contracts.v1.AuthService.SignIn:output_type -> contracts.v1.SignInResponse
+	4,  // 20: contracts.v1.AuthService.SignUp:output_type -> contracts.v1.SignUpResponse
+	6,  // 21: contracts.v1.AuthService.Refresh:output_type -> contracts.v1.RefreshResponse
+	8,  // 22: contracts.v1.AuthService.Logout:output_type -> contracts.v1.LogoutResponse
+	19, // 23: contracts.v1.AuthService.LogoutAll:output_type -> google.protobuf.Empty
+	10, // 24: contracts.v1.UserService.GetCurrentUser:output_type -> contracts.v1.GetUserResponse
+	10, // 25: contracts.v1.UserService.GetUserById:output_type -> contracts.v1.GetUserResponse
+	11, // 26: contracts.v1.UserService.GetUserList:output_type -> contracts.v1.GetUserListResponse
+	13, // 27: contracts.v1.UserService.CreateUser:output_type -> contracts.v1.CreateUserResponse
+	15, // 28: contracts.v1.UserService.UpdateUser:output_type -> contracts.v1.UpdateUserResponse
+	17, // 29: contracts.v1.UserService.DeleteUser:output_type -> contracts.v1.DeleteUserResponse
+	19, // [19:30] is the sub-list for method output_type
+	8,  // [8:19] is the sub-list for method input_type
+	8,  // [8:8] is the sub-list for extension type_name
+	8,  // [8:8] is the sub-list for extension extendee
+	0,  // [0:8] is the sub-list for field type_name
 }
 
 func init() { file_api_auth_v1_contracts_proto_init() }
@@ -1203,13 +1260,15 @@ func file_api_auth_v1_contracts_proto_init() {
 	if File_api_auth_v1_contracts_proto != nil {
 		return
 	}
+	file_api_auth_v1_contracts_proto_msgTypes[8].OneofWrappers = []any{}
+	file_api_auth_v1_contracts_proto_msgTypes[13].OneofWrappers = []any{}
 	type x struct{}
 	out := protoimpl.TypeBuilder{
 		File: protoimpl.DescBuilder{
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: unsafe.Slice(unsafe.StringData(file_api_auth_v1_contracts_proto_rawDesc), len(file_api_auth_v1_contracts_proto_rawDesc)),
 			NumEnums:      1,
-			NumMessages:   16,
+			NumMessages:   17,
 			NumExtensions: 0,
 			NumServices:   2,
 		},
