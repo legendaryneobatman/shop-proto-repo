@@ -1,0 +1,23 @@
+{
+  "name": "@legendaryneobatman/shop-proto-repo",
+  "version": "0.0.5",
+  "description": "Shared protobuf contracts for shop microservices",
+  "main": "index.js",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/legendaryneobatman/shop-proto-repo.git"
+  },
+  "files": [
+    "api/**/*.proto",
+    "gen/nest/**/*.ts",
+    "gen/go/**/*.go"
+  ],
+  "scripts": {
+    "gen": "./scripts/gen.sh",
+    "gen:go": "protoc --proto_path=. --go_out=gen/go --go_opt=paths=source_relative --go-grpc_out=gen/go --go-grpc_opt=paths=source_relative --experimental_allow_proto3_optional $(find api -name '*.proto')",
+    "gen:nest": "protoc --plugin=./node_modules/.bin/protoc-gen-ts_proto --ts_proto_out=./gen/nest --ts_proto_opt=nestJs=true --ts_proto_opt=outputServices=grpc-js --experimental_allow_proto3_optional --proto_path=. $(find api -name '*.proto')"
+  },
+  "devDependencies": {
+    "ts-proto": "^1.181.2"
+  }
+}

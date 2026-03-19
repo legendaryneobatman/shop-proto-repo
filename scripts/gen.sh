@@ -82,7 +82,7 @@ rm -rf gen/nest
 mkdir -p gen/nest
 
 # Генерируем TypeScript файлы
-bun protoc \
+bunx protoc \
     --plugin=./node_modules/.bin/protoc-gen-ts_proto \
     --ts_proto_out=./gen/nest \
     --ts_proto_opt=nestJs=true \
