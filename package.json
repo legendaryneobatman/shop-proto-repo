@@ -19,5 +19,8 @@
   },
   "devDependencies": {
     "ts-proto": "^1.181.2"
+  },
+  "exports": {
+    "./*": "./*"
   }
 }
