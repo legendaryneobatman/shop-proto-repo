@@ -1,0 +1,26 @@
+syntax = "proto3";
+package user.v1;
+option go_package = "github.com/legendaryneobatman/shop/gen/contracts/v1";
+
+
+import "google/protobuf/timestamp.proto";
+
+enum UserRole {
+  ROLE_UNSPECIFIED = 0;
+  ADMIN = -1;
+  USER = 1;
+  MODERATOR = 2;
+}
+
+message User {
+  string id = 1;
+  string name = 2;
+  string username = 3;
+  string email = 4;
+  string avatar_url = 5;
+  string phone = 6;
+  UserRole role = 7;
+  bool is_active = 8;
+  google.protobuf.Timestamp created_at = 9;
+  google.protobuf.Timestamp updated_at = 10;
+}

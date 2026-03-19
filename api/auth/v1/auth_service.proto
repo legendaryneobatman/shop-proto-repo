@@ -1,0 +1,15 @@
+syntax = "proto3";
+package auth.v1;
+option go_package = "github.com/legendaryneobatman/shop/gen/contracts/v1";
+
+import "google/protobuf/empty.proto";
+import "api/auth/v1/auth_messages.proto";
+
+
+service AuthService {
+  rpc SignIn(SignInRequest) returns (SignInResponse) {}
+  rpc SignUp(SignUpRequest) returns (SignUpResponse) {}
+  rpc Refresh(RefreshRequest) returns (RefreshResponse) {}
+  rpc Logout(LogoutRequest) returns (LogoutResponse) {}
+  rpc LogoutAll(google.protobuf.Empty) returns (google.protobuf.Empty) {}
+}
