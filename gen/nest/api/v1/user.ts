@@ -2,14 +2,24 @@
 // versions:
 //   protoc-gen-ts_proto  v1.181.2
 //   protoc               v3.12.4
-// source: api/user/v1/user_messages.proto
+// source: api/v1/user.proto
 
 /* eslint-disable */
+import type { handleUnaryCall, UntypedServiceImplementation } from "@grpc/grpc-js";
+import { GrpcMethod, GrpcStreamMethod } from "@nestjs/microservices";
 import _m0 from "protobufjs/minimal";
-import { Timestamp } from "../../../google/protobuf/timestamp";
-import { User, UserRole } from "./user_models";
+import { Observable } from "rxjs";
+import { Empty } from "../../google/protobuf/empty";
+import { Timestamp } from "../../google/protobuf/timestamp";
 
 export const protobufPackage = "user.v1";
+
+export enum UserRole {
+  ROLE_UNSPECIFIED = 0,
+  ADMIN = -1,
+  USER = 1,
+  MODERATOR = 2,
+}
 
 export interface GetUserRequest {
   id?: string | undefined;
@@ -63,6 +73,19 @@ export interface DeleteUserRequest {
 
 export interface DeleteUserResponse {
   id: string;
+}
+
+export interface User {
+  id: string;
+  name: string;
+  username: string;
+  email: string;
+  avatarUrl: string;
+  phone: string;
+  role: UserRole;
+  isActive: boolean;
+  createdAt: Timestamp | undefined;
+  updatedAt: Timestamp | undefined;
 }
 
 export const USER_V1_PACKAGE_NAME = "user.v1";
@@ -581,3 +604,265 @@ export const DeleteUserResponse = {
     return message;
   },
 };
+
+function createBaseUser(): User {
+  return {
+    id: "",
+    name: "",
+    username: "",
+    email: "",
+    avatarUrl: "",
+    phone: "",
+    role: 0,
+    isActive: false,
+    createdAt: undefined,
+    updatedAt: undefined,
+  };
+}
+
+export const User = {
+  encode(message: User, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+    if (message.id !== "") {
+      writer.uint32(10).string(message.id);
+    }
+    if (message.name !== "") {
+      writer.uint32(18).string(message.name);
+    }
+    if (message.username !== "") {
+      writer.uint32(26).string(message.username);
+    }
+    if (message.email !== "") {
+      writer.uint32(34).string(message.email);
+    }
+    if (message.avatarUrl !== "") {
+      writer.uint32(42).string(message.avatarUrl);
+    }
+    if (message.phone !== "") {
+      writer.uint32(50).string(message.phone);
+    }
+    if (message.role !== 0) {
+      writer.uint32(56).int32(message.role);
+    }
+    if (message.isActive !== false) {
+      writer.uint32(64).bool(message.isActive);
+    }
+    if (message.createdAt !== undefined) {
+      Timestamp.encode(message.createdAt, writer.uint32(74).fork()).ldelim();
+    }
+    if (message.updatedAt !== undefined) {
+      Timestamp.encode(message.updatedAt, writer.uint32(82).fork()).ldelim();
+    }
+    return writer;
+  },
+
+  decode(input: _m0.Reader | Uint8Array, length?: number): User {
+    const reader = input instanceof _m0.Reader ? input : _m0.Reader.create(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseUser();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          if (tag !== 10) {
+            break;
+          }
+
+          message.id = reader.string();
+          continue;
+        case 2:
+          if (tag !== 18) {
+            break;
+          }
+
+          message.name = reader.string();
+          continue;
+        case 3:
+          if (tag !== 26) {
+            break;
+          }
+
+          message.username = reader.string();
+          continue;
+        case 4:
+          if (tag !== 34) {
+            break;
+          }
+
+          message.email = reader.string();
+          continue;
+        case 5:
+          if (tag !== 42) {
+            break;
+          }
+
+          message.avatarUrl = reader.string();
+          continue;
+        case 6:
+          if (tag !== 50) {
+            break;
+          }
+
+          message.phone = reader.string();
+          continue;
+        case 7:
+          if (tag !== 56) {
+            break;
+          }
+
+          message.role = reader.int32() as any;
+          continue;
+        case 8:
+          if (tag !== 64) {
+            break;
+          }
+
+          message.isActive = reader.bool();
+          continue;
+        case 9:
+          if (tag !== 74) {
+            break;
+          }
+
+          message.createdAt = Timestamp.decode(reader, reader.uint32());
+          continue;
+        case 10:
+          if (tag !== 82) {
+            break;
+          }
+
+          message.updatedAt = Timestamp.decode(reader, reader.uint32());
+          continue;
+      }
+      if ((tag & 7) === 4 || tag === 0) {
+        break;
+      }
+      reader.skipType(tag & 7);
+    }
+    return message;
+  },
+};
+
+export interface UserServiceClient {
+  getCurrentUser(request: GetUserRequest): Observable<GetUserResponse>;
+
+  getUserById(request: GetUserRequest): Observable<GetUserResponse>;
+
+  getUserList(request: Empty): Observable<GetUserListResponse>;
+
+  createUser(request: CreateUserRequest): Observable<CreateUserResponse>;
+
+  updateUser(request: UpdateUserRequest): Observable<UpdateUserResponse>;
+
+  deleteUser(request: DeleteUserRequest): Observable<DeleteUserResponse>;
+}
+
+export interface UserServiceController {
+  getCurrentUser(request: GetUserRequest): Promise<GetUserResponse> | Observable<GetUserResponse> | GetUserResponse;
+
+  getUserById(request: GetUserRequest): Promise<GetUserResponse> | Observable<GetUserResponse> | GetUserResponse;
+
+  getUserList(request: Empty): Promise<GetUserListResponse> | Observable<GetUserListResponse> | GetUserListResponse;
+
+  createUser(
+    request: CreateUserRequest,
+  ): Promise<CreateUserResponse> | Observable<CreateUserResponse> | CreateUserResponse;
+
+  updateUser(
+    request: UpdateUserRequest,
+  ): Promise<UpdateUserResponse> | Observable<UpdateUserResponse> | UpdateUserResponse;
+
+  deleteUser(
+    request: DeleteUserRequest,
+  ): Promise<DeleteUserResponse> | Observable<DeleteUserResponse> | DeleteUserResponse;
+}
+
+export function UserServiceControllerMethods() {
+  return function (constructor: Function) {
+    const grpcMethods: string[] = [
+      "getCurrentUser",
+      "getUserById",
+      "getUserList",
+      "createUser",
+      "updateUser",
+      "deleteUser",
+    ];
+    for (const method of grpcMethods) {
+      const descriptor: any = Reflect.getOwnPropertyDescriptor(constructor.prototype, method);
+      GrpcMethod("UserService", method)(constructor.prototype[method], method, descriptor);
+    }
+    const grpcStreamMethods: string[] = [];
+    for (const method of grpcStreamMethods) {
+      const descriptor: any = Reflect.getOwnPropertyDescriptor(constructor.prototype, method);
+      GrpcStreamMethod("UserService", method)(constructor.prototype[method], method, descriptor);
+    }
+  };
+}
+
+export const USER_SERVICE_NAME = "UserService";
+
+export type UserServiceService = typeof UserServiceService;
+export const UserServiceService = {
+  getCurrentUser: {
+    path: "/user.v1.UserService/GetCurrentUser",
+    requestStream: false,
+    responseStream: false,
+    requestSerialize: (value: GetUserRequest) => Buffer.from(GetUserRequest.encode(value).finish()),
+    requestDeserialize: (value: Buffer) => GetUserRequest.decode(value),
+    responseSerialize: (value: GetUserResponse) => Buffer.from(GetUserResponse.encode(value).finish()),
+    responseDeserialize: (value: Buffer) => GetUserResponse.decode(value),
+  },
+  getUserById: {
+    path: "/user.v1.UserService/GetUserById",
+    requestStream: false,
+    responseStream: false,
+    requestSerialize: (value: GetUserRequest) => Buffer.from(GetUserRequest.encode(value).finish()),
+    requestDeserialize: (value: Buffer) => GetUserRequest.decode(value),
+    responseSerialize: (value: GetUserResponse) => Buffer.from(GetUserResponse.encode(value).finish()),
+    responseDeserialize: (value: Buffer) => GetUserResponse.decode(value),
+  },
+  getUserList: {
+    path: "/user.v1.UserService/GetUserList",
+    requestStream: false,
+    responseStream: false,
+    requestSerialize: (value: Empty) => Buffer.from(Empty.encode(value).finish()),
+    requestDeserialize: (value: Buffer) => Empty.decode(value),
+    responseSerialize: (value: GetUserListResponse) => Buffer.from(GetUserListResponse.encode(value).finish()),
+    responseDeserialize: (value: Buffer) => GetUserListResponse.decode(value),
+  },
+  createUser: {
+    path: "/user.v1.UserService/CreateUser",
+    requestStream: false,
+    responseStream: false,
+    requestSerialize: (value: CreateUserRequest) => Buffer.from(CreateUserRequest.encode(value).finish()),
+    requestDeserialize: (value: Buffer) => CreateUserRequest.decode(value),
+    responseSerialize: (value: CreateUserResponse) => Buffer.from(CreateUserResponse.encode(value).finish()),
+    responseDeserialize: (value: Buffer) => CreateUserResponse.decode(value),
+  },
+  updateUser: {
+    path: "/user.v1.UserService/UpdateUser",
+    requestStream: false,
+    responseStream: false,
+    requestSerialize: (value: UpdateUserRequest) => Buffer.from(UpdateUserRequest.encode(value).finish()),
+    requestDeserialize: (value: Buffer) => UpdateUserRequest.decode(value),
+    responseSerialize: (value: UpdateUserResponse) => Buffer.from(UpdateUserResponse.encode(value).finish()),
+    responseDeserialize: (value: Buffer) => UpdateUserResponse.decode(value),
+  },
+  deleteUser: {
+    path: "/user.v1.UserService/DeleteUser",
+    requestStream: false,
+    responseStream: false,
+    requestSerialize: (value: DeleteUserRequest) => Buffer.from(DeleteUserRequest.encode(value).finish()),
+    requestDeserialize: (value: Buffer) => DeleteUserRequest.decode(value),
+    responseSerialize: (value: DeleteUserResponse) => Buffer.from(DeleteUserResponse.encode(value).finish()),
+    responseDeserialize: (value: Buffer) => DeleteUserResponse.decode(value),
+  },
+} as const;
+
+export interface UserServiceServer extends UntypedServiceImplementation {
+  getCurrentUser: handleUnaryCall<GetUserRequest, GetUserResponse>;
+  getUserById: handleUnaryCall<GetUserRequest, GetUserResponse>;
+  getUserList: handleUnaryCall<Empty, GetUserListResponse>;
+  createUser: handleUnaryCall<CreateUserRequest, CreateUserResponse>;
+  updateUser: handleUnaryCall<UpdateUserRequest, UpdateUserResponse>;
+  deleteUser: handleUnaryCall<DeleteUserRequest, DeleteUserResponse>;
+}
